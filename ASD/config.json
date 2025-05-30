@@ -1,20 +1,24 @@
 {
   "MIDDLECONF" :{
-    "DMRSURL": "",
+    "DMRSURL": "NOT_ENTERED",
     "XMLNAME": "ASD",
     "APPNAME": "ASD"
   },
   "Debug": false,
 
-  "BentlyDMRSUrl": "",
-  "BenzDMRSUrl": "",
-  "FerrariDMRSUrl": "http://dev-dmrs.mfinder.co.kr:30030/",
-  "TeslaDMRSUrl": "",
-  "MarsDMRSUrl": "",
-  "SaturnDMRSUrl": "",
+  "BentleyDMRSUrl": "http://dev-dmrs.antiscam.co.kr/",
+  "FerrariDMRSUrl": "http://dev-dmrs.mfinder.co.kr/",
+  "TeslaDMRSUrl": "http://dev-dmrs.familycare.co.kr/",
+  "SaturnDMRSUrl": "http://dev-dmrs.couponwallet.co.kr/",
 
 
-  "TCRSUrl": "http://dev-tcrs.mfinder.co.kr:10010/",
+  "BentleyTCRSUrl": "http://dev-tcrs.antiscam.co.kr:10010/",
+  "FerrariTCRSUrl": "http://dev-tcrs.mfinder.co.kr:10010/",
+  "TeslaTCRSUrl": "http://dev-tcrs.familycare.co.kr",
+  "SaturnTCRSUrl": "http://dev-tcrs.couponwallet.co.kr:10010/",
+
+
+
 
   "DelaySecSKT":600,
   "DelaySecKT":600,
