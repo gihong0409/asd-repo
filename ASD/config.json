@@ -1,0 +1,29 @@
+{
+  "MIDDLECONF" :{
+    "DMRSURL": "",
+    "XMLNAME": "ASD",
+    "APPNAME": "ASD"
+  },
+  "Debug": false,
+
+  "BentlyDMRSUrl": "",
+  "BenzDMRSUrl": "",
+  "FerrariDMRSUrl": "http://dev-dmrs.mfinder.co.kr:30030/",
+  "TeslaDMRSUrl": "",
+  "MarsDMRSUrl": "",
+  "SaturnDMRSUrl": "",
+
+
+  "TCRSUrl": "http://dev-tcrs.mfinder.co.kr:10010/",
+
+  "DelaySecSKT":600,
+  "DelaySecKT":600,
+  "DelaySecLGUP":600,
+
+  "SKTProcess":true,
+  "KTProcess":true,
+  "LGUPProcess":true,
+  "AppName":"ASD",
+  "NumGoRoutine":4,
+  "MaxMemberList":1000
+}
