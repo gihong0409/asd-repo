@@ -11,7 +11,7 @@ ENV APP_HOME=/app/config/
 COPY app /app/asd
 
 # Copy the entrypoint script
-COPY script.sh /app/script.sh
+COPY dist/script.sh /app/script.sh
 
 # Set permissions for the binary and script
 RUN chmod 0755 /app/asd

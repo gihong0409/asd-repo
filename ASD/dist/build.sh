@@ -1,12 +1,30 @@
 #!/bin/bash
 set -e
 
-echo "🔨 Building Go application..."
+echo "🔨 Building ASD..."
 
-# Go 바이너리 빌드
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -v -o ../app ../
+# Go 모듈 정리
+echo "📦 Tidying up Go modules..."
+go mod tidy
 
-echo "🐳 Building Docker image..."
-docker build -t asd:latest ../
+# 빌드
+echo "🏗️  Building binary..."
+go build -o asd -ldflags "-X main.buildTime=$(date +'%Y/%m/%d_%H:%M:%S')" ../main.go
 
 echo "✅ Build completed!"
+echo "Run with: ./script.sh"
+
+
+export BENTLEY=false
+
+export BENZ=false
+
+export FERRARI=false
+
+export TESLA=false
+
+export MARS=false
+
+export SATURN=true
+
+./asd

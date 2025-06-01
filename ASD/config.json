@@ -7,15 +7,19 @@
   "Debug": false,
 
   "BentleyDMRSUrl": "http://dev-dmrs.antiscam.co.kr/",
+  "BenzDMRSUrl": "Not Registered",
   "FerrariDMRSUrl": "http://dev-dmrs.mfinder.co.kr/",
   "TeslaDMRSUrl": "http://dev-dmrs.familycare.co.kr/",
+  "MarsDMRSUrl": "Not Registerd",
   "SaturnDMRSUrl": "http://dev-dmrs.couponwallet.co.kr/",
 
-
   "BentleyTCRSUrl": "http://dev-tcrs.antiscam.co.kr:10010/",
+  "BenzTCRSUrl": "Not Registered",
   "FerrariTCRSUrl": "http://dev-tcrs.mfinder.co.kr:10010/",
   "TeslaTCRSUrl": "http://dev-tcrs.familycare.co.kr",
+  "MarsTCRSUrl": "Not Registerd",
   "SaturnTCRSUrl": "http://dev-tcrs.couponwallet.co.kr:10010/",
+
 
 
 
@@ -29,5 +33,12 @@
   "LGUPProcess":true,
   "AppName":"ASD",
   "NumGoRoutine":4,
-  "MaxMemberList":1000
+  "MaxMemberList":1000,
+
+  "ServiceNames": ["BENTLEY", "BENZ", "FERRARI", "TESLA", "MARS", "SATURN"]
+
+
+
+
+
 }

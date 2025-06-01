@@ -12,4 +12,4 @@ export MARS=false
 
 export SATURN=true
 
-/app/asd
+./asd
