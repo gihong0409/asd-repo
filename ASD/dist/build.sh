@@ -19,12 +19,12 @@ export BENTLEY=false
 
 export BENZ=false
 
-export FERRARI=false
+export FERRARI=true
 
 export TESLA=false
 
 export MARS=false
 
-export SATURN=true
+export SATURN=false
 
 ./asd

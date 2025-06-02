@@ -1,0 +1,32 @@
+{
+  "MIDDLECONF" :{
+      "DMRSURL": "http://dev-dmrs.mfinder.co.kr:30030/",
+      "XMLNAME": "CBA",
+      "APPNAME": "CBA"
+  },
+  "RedisAddr":"stage.mfinder.co.kr:26379",
+  "Debug": false,
+  "LogerfilePath": "/app/log/CBA_%Y%m%d.log",
+  "TCRSUrl": "http://dev-tcrs.mfinder.co.kr:10010/",
+  "SKTRunDay": 1,
+  "DelaySecSKT":600,
+  "DelaySecKT":600,
+  "DelaySecLGUP":600,
+  "SKTProcess":true,
+  "KTProcess":true,
+  "LGUPProcess":true,
+  "AppName":"CBA",
+  "NumGoRoutine":4,
+  "MaxMemberList":1000,
+
+  "Slack": {
+    "BatchStartCheckFlag": true,
+    "BatchStartCheckChannel": "C08GERQQ290",
+    "KTCmdType": 1000,
+    "KTChannel": "",
+    "LGUPCmdType": 1000,
+    "LGUPChannel": "",
+    "SKTCmdType": 1000,
+    "SKTChannel": ""
+  }
+}

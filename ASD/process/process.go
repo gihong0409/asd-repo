@@ -3,6 +3,7 @@ package process
 import (
 	"ASD/factory"
 	"ASD/process/batch"
+	"git.datau.co.kr/ferrari/ferrari-common/commonutils"
 	"log"
 	"sync"
 )
@@ -23,32 +24,42 @@ func (_self *ASDProcess) Initialize(fac *factory.Factory) {
 }
 
 func (_self *ASDProcess) Processing() {
-
+	requestID := commonutils.GenTransID()
 	log.Print("나이 조회 프로세스 실행")
 
 	var wg sync.WaitGroup
+	wgCount := 0
 
-	// 3개의 고루틴을 기다리도록 설정
-	wg.Add(1)
+	if _self.Fac.Propertys().SKTProcess {
+		wgCount++
+	}
+
+	if _self.Fac.Propertys().KTProcess {
+		wgCount++
+	}
+	if _self.Fac.Propertys().KTProcess {
+		wgCount++
+	}
+
+	wg.Add(wgCount)
 
 	// SKT 나이 가져오기
 	go func() {
 		defer wg.Done() // 고루틴 완료 시  카운트 감소
+		_self.sktProcess.Process(requestID)
+
 	}()
-
-	// KT 나이 가져오기
 	//go func() {
-	//	defer wg.Done()
-	//	KtGetAgeAll(kt, TCRSurl)
-	//}()
+	//	defer wg.Done() // 고루틴 완료 시  카운트 감소
+	//	//_self.ktProcess.Process(requestID) 추후 개발 후 풀어주기
 	//
-	//// LG U+ 나이 가져오기
+	//}()
 	//go func() {
-	//	defer wg.Done()
-	//	LGUPGetAgeAll(lgup, TCRSurl)
+	//	defer wg.Done() // 고루틴 완료 시  카운트 감소
+	//	//_self.LgupProcess(requestID) 추후 개발 후 풀어주기
+	//
 	//}()
 
-	// 모든 고루틴이 완료될 때까지 대기
 	wg.Wait()
 
 }

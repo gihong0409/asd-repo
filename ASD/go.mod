@@ -10,4 +10,9 @@ require (
 
 )
 
-require golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+require (
+	github.com/beevik/guid v0.0.0-20170504223318-d0ea8faecee0 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
+	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/text v0.3.6 // indirect
+)

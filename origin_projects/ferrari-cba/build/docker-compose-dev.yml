@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  ferrari-cba:
+    container_name: ferrari-cba
+    image: ghcr.io/datauniverse-lab/ferrari/ferrari-cba:master
+    hostname: DEV_FERRARI
+    network_mode: bridge
+    environment:
+      APP_HOME: /app/config/
+      APP_MODE: DEV
+    volumes:
+       - /etc/timezone:/etc/timezone:ro
+       - /etc/localtime:/etc/localtime:ro
+       - /media/Data/ServerApp/cba/log:/app/log
+       - /media/Data/ServerApp/cba/config:/app/config
+       - /media/Data/cert/mfinder.co.kr:/app/cert
+networks:
+  default:
+    external: true
+    name: bridge

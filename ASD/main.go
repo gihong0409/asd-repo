@@ -2,7 +2,9 @@ package main
 
 import (
 	"ASD/factory"
+	"ASD/process"
 	"flag"
+	"log"
 	"os"
 )
 
@@ -25,10 +27,14 @@ func main() {
 	if *appMode == "" {
 		*appMode = "LIVE"
 	}
-
 	fac := factory.Factory{JSONConfigPath: *appEnv, AppMode: *appMode}
 	fac.Initialize()
 	defer destroy(&fac)
 
-	println("최종: ", fac.TargetService)
+	log.Printf("Tartget Service : %d", fac.Propertys().ServiceNames)
+
+	var proc process.ASDProcess
+	proc.Initialize(&fac)
+	proc.Processing()
+
 }
