@@ -35,13 +35,9 @@ func (_self *KTProcess) Process(requestID string) {
 			return
 		}
 		if len(AsdMember) == 0 {
-			println("KT   :  len(AsdMember) == 0")
 			return
 		} else {
-			println("***KT AsdMember*** ", &AsdMember)
 			for i, _ := range AsdMember {
-				println(i, "번째: ", AsdMember[i].PNumber)
-				println("KT: Member Age Get Start: ", AsdMember[i].PNumber, "Telecom", AsdMember[i].Telecom)
 
 				data := utils.GetMemberInfoTCRS(_self.Fac.TargetTCRSUrl, "1", AsdMember[i].PNumber)
 
@@ -59,10 +55,8 @@ func (_self *KTProcess) Process(requestID string) {
 					requestID,
 				)
 				if dmrsheader.ErrCode != formats.Error {
-					println("Update err: ", dmrsheader.ErrCode, dmrsheader.ErrCode)
 					continue
 				}
-				println("Member Age Get Start: ", AsdMember[i].PNumber, "PCode: ", AsdMember[i].PCode, "Telecom", AsdMember[i].Telecom, "age: ", AsdMember[i].Age)
 
 			}
 		}

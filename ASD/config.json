@@ -33,10 +33,10 @@
 
   "SKTProcess":true,
   "KTProcess":true,
-  "LGUPProcess":false,
+  "LGUPProcess":true,
   "AppName":"ASD",
   "NumGoRoutine":4,
-  "MaxMemberList":1000,
+  "MaxMemberList":5,
 
   "ServiceNames": ["BENTLEY", "BENZ", "FERRARI", "TESLA", "MARS", "SATURN"]
 

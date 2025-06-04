@@ -35,21 +35,16 @@ func (_self *SKTProcess) Process(requestID string) {
 		)
 
 		if len(AsdMember) == 0 {
-			println("SKT   :  len(AsdMember) == 0")
 
 			return
 		} else {
-			println("SKT   :", len(AsdMember))
 
 			for i := range AsdMember {
 				time.Sleep(1 * time.Second)
-				println("Member Age Get Start: ", AsdMember[i].PNumber, "Telecom", AsdMember[i].Telecom)
 
 				data := utils.GetMemberInfoTCRS(_self.Fac.TargetTCRSUrl, "0", AsdMember[i].PNumber)
 
 				AsdMember[i].Age = utils.ExtBD(data, 0)
-
-				println("SKT PNumber", AsdMember[i].PNumber, " age: ", AsdMember[i].Age)
 
 				dmrsclient.DBMCall(
 					_self.Fac.Propertys().DmrsInfo,

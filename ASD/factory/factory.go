@@ -23,7 +23,6 @@ type Config struct {
 	SKTProcess    bool     `json:"SKTProcess"`
 	KTProcess     bool     `json:"KTProcess"`
 	LGUPProcess   bool     `json:"LGUPProcess"`
-	NumGoRoutine  int      `json:"NumGoRoutine"`
 	MaxMemberList int      `json:"MaxMemberList"`
 	ServiceNames  []string `json:"ServiceNames"` // 서비스 이름 배열 추가
 
@@ -80,11 +79,6 @@ func (_self *Factory) Initialize() {
 
 	_self.logger = logrus.New()
 
-	// _self.logger.formatster = new(logrus.JSONformatster)
-
-	//	_self.logger.formatster = new(logrus.Textformatster) //default
-	// log.formatster.(*logrus.Textformatster).DisableTimestamp = true // remove timestamp from test output
-
 	_self.logger.Level = logrus.DebugLevel
 	_self.logger.Out = mw
 	_self.logger.Formatter = customformatster
@@ -96,25 +90,29 @@ func (_self *Factory) Initialize() {
 	case 0:
 		_self.property.DmrsInfo.DMRSURL = _self.property.BentleyDMRSUrl
 		_self.TargetTCRSUrl = _self.property.BentleyTCRSUrl
-	//case 1:
-	//	_self.property.DmrsInfo.DMRSURL=_self.property.BenzDMRSUrl
-	//	_self.TargetTCRSUrl = _self.property.BenzTCRSUrl
+	case 1:
+		//_self.property.DmrsInfo.DMRSURL = _self.property.BenzDMRSUrl
+		//_self.TargetTCRSUrl = _self.property.BenzTCRSUrl
+		_self.Logger().Error("아직 추가되지 않은 서비스입니다.")
+
 	case 2:
 		_self.property.DmrsInfo.DMRSURL = _self.property.FerrariDMRSUrl
 		_self.TargetTCRSUrl = _self.property.FerrariTCRSUrl
 	case 3:
 		_self.property.DmrsInfo.DMRSURL = _self.property.TeslaDMRSUrl
 		_self.TargetTCRSUrl = _self.property.TeslaTCRSUrl
-	//case 4:
-	//	_self.property.DmrsInfo.DMRSURL=_self.property.MarsDMRSUrl
-	//	_self.TargetTCRSUrl = _self.property.MarsTCRSUrl
+	case 4:
+		//_self.property.DmrsInfo.DMRSURL = _self.property.MarsDMRSUrl
+		//_self.TargetTCRSUrl = _self.property.MarsTCRSUrl
+		_self.Logger().Error("아직 추가되지 않은 서비스입니다.")
+
 	case 5:
 		_self.property.DmrsInfo.DMRSURL = _self.property.SaturnDMRSUrl
 		_self.TargetTCRSUrl = _self.property.SaturnTCRSUrl
 	}
 
-	println("target service: ", _self.TargetService, "dmrs and tcrs URL: ",
-		_self.property.DmrsInfo.DMRSURL, _self.TargetTCRSUrl)
+	println("target service: ", _self.TargetService, "\nDMRS URL: ", _self.property.DmrsInfo.DMRSURL,
+		"\nTCRS URL: ", _self.TargetTCRSUrl)
 
 }
 
@@ -127,6 +125,7 @@ func (_self *Factory) Logger() *logrus.Logger {
 func (_self *Factory) Propertys() Config {
 	return _self.property
 }
+
 func (_self *Factory) loadEnv(services []string) int {
 
 	names := services
@@ -134,32 +133,45 @@ func (_self *Factory) loadEnv(services []string) int {
 	if len(names) == 0 {
 		return -1
 	}
+
 	envService := make([]bool, len(names))
+
 	for i, name := range names {
+
 		envValue := os.Getenv(name)
+
 		fmt.Printf("Env %s: %s\n", name, envValue)
+
 		var err error
+
 		if envService[i], err = strconv.ParseBool(envValue); err != nil {
 			return -1
 		}
+
 		fmt.Printf("%s: %v\n", name, envService[i])
 	}
 	trueCount, targetService := 0, -1
+
 	for i, val := range envService {
+
 		if val {
+
 			trueCount++
+
 			targetService = i
 		}
 	}
 	if trueCount == 0 {
-		fmt.Println("스크립트에서 나이 추출을 실행할 서비스의 값을 true로 변경해주세요.")
+		_self.Logger().Error("환경변수에 나이 추출을 실행할 서비스의 값을 true로 변경해주세요.")
 
 		return -1
 	}
 	if trueCount > 1 {
-		fmt.Println("스크립트에 2개 이상의 서비스가 true로 설정되어 있습니다.")
+		_self.Logger().Error("환경변수에 2개 이상의 서비스가 true로 설정되어 있습니다.")
+
 		return -1
 	}
-	fmt.Printf("선택된 서비스: %s (index: %d)\n", names[targetService], targetService)
+	_self.Logger().Error("선택된 서비스: %s (index: %d)\n", names[targetService], targetService)
+
 	return targetService
 }

@@ -31,13 +31,11 @@ func (_self *LGUPProcess) Process(requestID string) {
 		)
 
 		if len(AsdMember) == 0 {
-			println("LGUP   :  len(AsdMember) == 0")
 			return
 		} else {
 
 			for i := range AsdMember {
 				data := utils.GetMemberInfoTCRS(_self.Fac.TargetTCRSUrl, "2", AsdMember[i].PNumber)
-				println("LGUP: Member Age Get Start: ", AsdMember[i].PCode, "Telecom", AsdMember[i].Telecom)
 
 				time.Sleep(1 * time.Second)
 				AsdMember[i].Age = utils.ExtBD(data, 2)
@@ -52,7 +50,6 @@ func (_self *LGUPProcess) Process(requestID string) {
 					nil,
 					requestID,
 				)
-				println("Member Age Get Start: ", AsdMember[i].PNumber, "PCode: ", AsdMember[i].PCode, "Telecom", AsdMember[i].Telecom, "age: ", AsdMember[i].Age)
 
 			}
 

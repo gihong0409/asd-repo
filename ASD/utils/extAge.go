@@ -70,7 +70,11 @@ func ExtBD(data map[string]interface{}, tel int) int {
 
 		println(": LGUP: ", body.Age, ": 생년월일: ", bd)
 
-		result, _ := strconv.Atoi(bd)
+		result, err := strconv.Atoi(bd)
+		if err != nil {
+			logrus.Error("lGUP: error: 생년월일이 숫자 형식이 아님: ", bd)
+			return -1
+		}
 		return result
 	}
 	logrus.Error("extBD error")
