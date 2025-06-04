@@ -15,19 +15,14 @@
 
 
 
-
-
-
   "BentleyTCRSUrl": "http://dev-tcrs.antiscam.co.kr",
   "BenzTCRSUrl": "Not Registered",
 
 
-  "FerrariTCRSUrl": "http://tcrs.couponwallet.co.kr:10017/",
+  "FerrariTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
   "TeslaTCRSUrl": "http://tcrs.familycare.co.kr",
   "MarsTCRSUrl": "Not Registerd",
   "SaturnTCRSUrl": "http://tcrs.couponwallet.co.kr:10010/",
-
-
 
 
 
@@ -37,7 +32,7 @@
   "DelaySecLGUP":600,
 
   "SKTProcess":true,
-  "KTProcess":false,
+  "KTProcess":true,
   "LGUPProcess":false,
   "AppName":"ASD",
   "NumGoRoutine":4,

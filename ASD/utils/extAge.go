@@ -18,7 +18,6 @@ func ExtBD(data map[string]interface{}, tel int) int {
 
 	//SKT
 	case 0:
-
 		body, ok := data["BodyInfo"].(sktformats.UserInfoRsp)
 
 		if !ok {

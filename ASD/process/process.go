@@ -10,17 +10,17 @@ import (
 
 type ASDProcess struct {
 	// mutex sync.Mutex
-	Fac        *factory.Factory
-	sktProcess batch.SKTProcess
-	//ktProcess   batch.KTProcess
-	//lgupProcess batch.LGUPProcess
+	Fac         *factory.Factory
+	sktProcess  batch.SKTProcess
+	ktProcess   batch.KTProcess
+	lgupProcess batch.LGUPProcess
 }
 
 func (_self *ASDProcess) Initialize(fac *factory.Factory) {
 	_self.Fac = fac
 	_self.sktProcess = batch.SKTProcess{Fac: fac}
-	//_self.ktProcess = batch.KTProcess{Fac: fac}
-	//_self.lgupProcess = batch.LGUPProcess{Fac: fac}
+	_self.ktProcess = batch.KTProcess{Fac: fac}
+	_self.lgupProcess = batch.LGUPProcess{Fac: fac}
 }
 
 func (_self *ASDProcess) Processing() {
@@ -37,7 +37,7 @@ func (_self *ASDProcess) Processing() {
 	if _self.Fac.Propertys().KTProcess {
 		wgCount++
 	}
-	if _self.Fac.Propertys().KTProcess {
+	if _self.Fac.Propertys().LGUPProcess {
 		wgCount++
 	}
 
@@ -49,16 +49,16 @@ func (_self *ASDProcess) Processing() {
 		_self.sktProcess.Process(requestID)
 
 	}()
-	//go func() {
-	//	defer wg.Done() // 고루틴 완료 시  카운트 감소
-	//	//_self.ktProcess.Process(requestID) 추후 개발 후 풀어주기
-	//
-	//}()
-	//go func() {
-	//	defer wg.Done() // 고루틴 완료 시  카운트 감소
-	//	//_self.LgupProcess(requestID) 추후 개발 후 풀어주기
-	//
-	//}()
+	go func() {
+		defer wg.Done() // 고루틴 완료 시  카운트 감소
+		_self.ktProcess.Process(requestID)
+
+	}()
+	go func() {
+		defer wg.Done() // 고루틴 완료 시  카운트 감소
+		_self.lgupProcess.Process(requestID)
+
+	}()
 
 	wg.Wait()
 

@@ -21,12 +21,12 @@ func main() {
 	flag.Parse()
 
 	if *appEnv == "" {
-		*appEnv = `../`
+		*appEnv = `./`
 	}
 
-	if *appMode == "" {
-		*appMode = "LIVE"
-	}
+	//if *appMode == "" {
+	//	*appMode = "LIVE"
+	//}
 	fac := factory.Factory{JSONConfigPath: *appEnv, AppMode: *appMode}
 	fac.Initialize()
 	defer destroy(&fac)

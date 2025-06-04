@@ -3,18 +3,12 @@ package factory
 import (
 	"encoding/json"
 	"fmt"
-	"git.datau.co.kr/ferrari/ferrari-common/commonutils"
 	"git.datau.co.kr/ferrari/ferrari-common/dmrsapi/dmrsformats"
-	"git.datau.co.kr/ferrari/ferrari-common/tcrsapi/tcrsformats"
-	"git.datau.co.kr/ferrari/ferrari-common/tcrsapi/tcrsformats/ktformats"
-	"git.datau.co.kr/ferrari/ferrari-common/tcrsapi/tcrsformats/lgupformats"
-	"git.datau.co.kr/ferrari/ferrari-common/tcrsapi/tcrsformats/sktformats"
 	"github.com/sirupsen/logrus"
 	"io"
 	"io/ioutil"
 	"os"
 	"strconv"
-	"strings"
 )
 
 type Config struct {
@@ -168,65 +162,4 @@ func (_self *Factory) loadEnv(services []string) int {
 	}
 	fmt.Printf("선택된 서비스: %s (index: %d)\n", names[targetService], targetService)
 	return targetService
-}
-
-func (_self *Factory) GetMemberInfo(TCWSURL string, telecom string, pnumber string) map[string]interface{} {
-	var retData map[string]interface{}
-	var teleName string
-
-	if telecom == "0" || telecom == "1" || telecom == "2" {
-		teleName = commonutils.TeleTypeNumToTelecomName(telecom)
-	} else {
-		teleName = telecom
-	}
-
-	println("telecom: ", telecom)
-	println("teleName: ", teleName)
-	cmdType := "USERINFO"
-
-	if telecom == "1" {
-		cmdType = "USERINFOANDKWAYS"
-	}
-
-	tcrsHeader := tcrsformats.ReqHeader{CmdType: cmdType}
-	tcrsBody := tcrsformats.ReqBodyPNumber{PNumber: pnumber}
-
-	tcrsRSP := commonutils.RestfulSendData(TCWSURL+teleName, commonutils.MakeJsonData(tcrsHeader, tcrsBody))
-
-	retData = make(map[string]interface{})
-
-	if strings.ToUpper(teleName) == "SKT" {
-		var tcrsRspHeader tcrsformats.RspHeader
-		var tcrsRspBody sktformats.RspMain
-		var tcrsRspBodyDetail sktformats.UserInfoRsp
-		tcrsRspBody.Body = &tcrsRspBodyDetail
-
-		commonutils.JsonToHaderBody([]byte(tcrsRSP), &tcrsRspHeader, &tcrsRspBody)
-		retData["Header"] = tcrsRspHeader
-		retData["Body"] = tcrsRspBody
-		retData["BodyInfo"] = tcrsRspBodyDetail
-
-	} else if strings.ToUpper(teleName) == "KT" {
-		var tcrsRspHeader tcrsformats.RspHeader
-		var tcrsRspBody ktformats.RSPUserInfoAndKways
-
-		commonutils.JsonToHaderBody([]byte(tcrsRSP), &tcrsRspHeader, &tcrsRspBody)
-
-		retData["Header"] = tcrsRspHeader
-		retData["Body"] = tcrsRspBody
-
-	} else if strings.ToUpper(teleName) == "LGUP" {
-		var tcrsRspHeader tcrsformats.RspHeader
-
-		//원래 매핑하던 포멧에는 Age 포함하지 않는 이슈로 LGUPRSPUserInfo로 변경
-		var tcrsRspBody lgupformats.RSPUserInfo
-
-		commonutils.JsonToHaderBody([]byte(tcrsRSP), &tcrsRspHeader, &tcrsRspBody)
-
-		retData["Header"] = tcrsRspHeader
-		retData["Body"] = tcrsRspBody
-	}
-
-	return retData
-
 }

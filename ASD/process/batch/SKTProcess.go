@@ -1,9 +1,9 @@
 package batch
 
 import (
+	"ASD/dmrsapi"
 	"ASD/factory"
 	"ASD/utils"
-	"fmt"
 	"git.datau.co.kr/ferrari/ferrari-common/dmrsapi/dmrsclient"
 	"git.datau.co.kr/ferrari/ferrari-common/dmrsapi/dmrsformats"
 	"sync"
@@ -16,11 +16,13 @@ type SKTProcess struct {
 }
 
 func (_self *SKTProcess) Process(requestID string) {
-	AsdMember := []dmrsformats.AsdMember{} //CBA에서 사용하던 포멧 활용
 
-	var loop bool = true
+	println("requestID: ", requestID)
+	for {
 
-	for loop {
+		AsdMember := []dmrsapi.AsdMember{} //Common 에 통합 전. 현재 프로젝트에 추가함
+
+		println("flag: SKT")
 		dmrsclient.DBMCall(
 			_self.Fac.Propertys().DmrsInfo,
 			dmrsformats.SELECTQUERY,
@@ -33,32 +35,36 @@ func (_self *SKTProcess) Process(requestID string) {
 		)
 
 		if len(AsdMember) == 0 {
-			loop = false
+			println("SKT   :  len(AsdMember) == 0")
+
+			return
+		} else {
+			println("SKT   :", len(AsdMember))
+
+			for i := range AsdMember {
+				time.Sleep(1 * time.Second)
+				println("Member Age Get Start: ", AsdMember[i].PNumber, "Telecom", AsdMember[i].Telecom)
+
+				data := utils.GetMemberInfoTCRS(_self.Fac.TargetTCRSUrl, "0", AsdMember[i].PNumber)
+
+				AsdMember[i].Age = utils.ExtBD(data, 0)
+
+				println("SKT PNumber", AsdMember[i].PNumber, " age: ", AsdMember[i].Age)
+
+				dmrsclient.DBMCall(
+					_self.Fac.Propertys().DmrsInfo,
+					dmrsformats.CUDQUERY,
+					"UpdateAgeCheck",
+					[]interface{}{
+						AsdMember[i].Age, AsdMember[i].PNumber,
+					},
+					nil,
+					requestID,
+				)
+
+			}
 
 		}
-
-		for i := range AsdMember {
-			data := _self.Fac.GetMemberInfo(_self.Fac.TargetTCRSUrl, "0", AsdMember[i].PNumber)
-
-			time.Sleep(1 * time.Second)
-			AsdMember[i].Age = utils.ExtBD(data, AsdMember[i].Telecom)
-
-			dmrsclient.DBMCall(
-				_self.Fac.Propertys().DmrsInfo,
-				dmrsformats.CUDQUERY,
-				"UpdateAgeCheck",
-				[]interface{}{
-					AsdMember[i].Age, AsdMember[i].PNumber,
-				},
-				nil,
-				requestID,
-			)
-		}
-
-		loop = false
 
 	}
-
-	fmt.Println(AsdMember)
-
 }
