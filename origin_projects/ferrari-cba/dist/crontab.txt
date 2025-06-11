@@ -1,3 +1,0 @@
-30 0 * * * /app/script.sh
-# An empty line is required at the end of this file for a valid cron file.
-# docker logs must have to foreground output

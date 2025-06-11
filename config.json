@@ -1,0 +1,38 @@
+{
+  "MIDDLECONF" :{
+    "DMRSURL": "NOT_ENTERED",
+    "XMLNAME": "ASD",
+    "APPNAME": "ASD"
+  },
+
+  "ServiceNames": ["BENTLEY", "BENZ", "FERRARI", "TESLA", "MARS", "SATURN"],
+
+
+  "BentleyDMRSUrl": "http://dev-dmrs.antiscam.co.kr:30030/",
+  "BenzDMRSUrl": "https://dev-dmrs.autocall.ai",
+  "FerrariDMRSUrl": "http://dev-dmrs.mfinder.co.kr:30030/",
+  "TeslaDMRSUrl": "http://dev-dmrs.familycare.co.kr:30030/",
+  "MarsDMRSUrl": "Not Registerd",
+  "SaturnDMRSUrl": "http://dev-dmrs.couponwallet.co.kr:30030/",
+
+
+
+  "BentleyTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
+  "BenzTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
+  "FerrariTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
+  "TeslaTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
+  "MarsTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
+  "SaturnTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
+
+
+  "DelaySecSKT":1000,
+  "DelaySecKT":1000,
+  "DelaySecLGUP":1000,
+
+  "SKTProcess":true,
+  "KTProcess":true,
+  "LGUPProcess":true,
+
+  "MaxMemberList":100
+
+}
