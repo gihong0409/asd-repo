@@ -15,41 +15,60 @@ type ASDProcess struct {
 	lgupProcess batch.LGUPProcess
 }
 
-func (self *ASDProcess) Initialize(fac *factory.Factory) {
-	self.Fac = fac
-	self.sktProcess = batch.SKTProcess{Fac: fac}
-	self.ktProcess = batch.KTProcess{Fac: fac}
-	self.lgupProcess = batch.LGUPProcess{Fac: fac}
+func (_self *ASDProcess) Initialize(fac *factory.Factory) {
+	_self.Fac = fac
+	_self.sktProcess = batch.SKTProcess{Fac: fac}
+	_self.ktProcess = batch.KTProcess{Fac: fac}
+	_self.lgupProcess = batch.LGUPProcess{Fac: fac}
 }
 
-func (self *ASDProcess) Processing() {
+func (_self *ASDProcess) Processing() {
 	requestID := utils.GenTransID()
 
-	self.Fac.Print("***************** 나이 조회 프로세스 실행 *****************")
+	var service string
+
+	switch {
+	case _self.Fac.Property.BenzProcess:
+		service = "Benz"
+	case _self.Fac.Property.BentleyProcess:
+		service = "Bentley"
+	case _self.Fac.Property.SaturnProcess:
+		service = "Saturn"
+	case _self.Fac.Property.FerrariProcess:
+		service = "Ferrari"
+	case _self.Fac.Property.TeslaProcess:
+		service = "Tesla"
+	default:
+		_self.Fac.Print("모든 프로세스가 비활성화 상태")
+		select {} // 파드가 죽지않도록 대기
+	}
+	
+
+	_self.Fac.Print("[",service,"] 나이 조회 프로세스 실행")
 
 	var wg sync.WaitGroup
 
-	if self.Fac.Propertys().SKTProcess {
+	if _self.Fac.Propertys().SKTProcess {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			self.sktProcess.Process(requestID)
+			_self.sktProcess.Process(requestID)
 		}()
 	}
 
-	if self.Fac.Propertys().KTProcess {
+	if _self.Fac.Propertys().KTProcess {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			self.ktProcess.Process(requestID)
+			_self.ktProcess.Process(requestID)
 		}()
 	}
 
-	if self.Fac.Propertys().LGUPProcess {
+	if _self.Fac.Propertys().LGUPProcess {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			self.lgupProcess.Process(requestID)
+			_self.lgupProcess.Process(requestID)
 		}()
 	}
 
