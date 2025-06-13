@@ -1,38 +1,55 @@
 {
-  "MIDDLECONF" :{
-    "DMRSURL": "NOT_ENTERED",
-    "XMLNAME": "ASD",
-    "APPNAME": "ASD"
+  "SATURN": {
+    "MIDDLECONF": {
+      "DMRSURL": "dms-svc.familycare.svc.cluster.local.:1040",
+      "XMLNAME": "ASD",
+      "APPNAME": "ASD"
+    },
+    "TCRSUrl": "http://dev-tcrs.couponwallet.co.kr:10017/"
   },
-
-  "ServiceNames": ["BENTLEY", "BENZ", "FERRARI", "TESLA", "MARS", "SATURN"],
-
-
-  "BentleyDMRSUrl": "http://dev-dmrs.antiscam.co.kr:30030/",
-  "BenzDMRSUrl": "https://dev-dmrs.autocall.ai",
-  "FerrariDMRSUrl": "http://dev-dmrs.mfinder.co.kr:30030/",
-  "TeslaDMRSUrl": "http://dev-dmrs.familycare.co.kr:30030/",
-  "MarsDMRSUrl": "Not Registerd",
-  "SaturnDMRSUrl": "http://dev-dmrs.couponwallet.co.kr:30030/",
-
-
-
-  "BentleyTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
-  "BenzTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
-  "FerrariTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
-  "TeslaTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
-  "MarsTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
-  "SaturnTCRSUrl": "http://tcrs.mfinder.co.kr:10017/",
-
-
-  "DelaySecSKT":1000,
-  "DelaySecKT":1000,
-  "DelaySecLGUP":1000,
-
-  "SKTProcess":true,
-  "KTProcess":true,
-  "LGUPProcess":true,
-
-  "MaxMemberList":100
-
+  "BENTLEY": {
+    "MIDDLECONF": {
+      "DMRSURL": "http://dev-dmrs.couponwallet.co.kr",
+      "XMLNAME": "ASD",
+      "APPNAME": "ASD"
+    },
+    "TCRSUrl": "http://dev-tcrs.antiscam.co.kr:20010/"
+  },
+  "TESLA": {
+    "MIDDLECONF": {
+      "DMSURL": "dms-svc.familycare.svc.cluster.local.:1040",
+      "XMLNAME": "ASD",
+      "APPNAME": "ASD"
+    },
+    "TCRSUrl": "http://dev-tcrs.familycare.co.kr:10015/"
+  },
+  "BENZ": {
+    "MIDDLECONF": {
+      "DMRSURL": "https://dev-dmrs.autocall.ai",
+      "XMLNAME": "ASD",
+      "APPNAME": "ASD"
+    },
+    "TCRSUrl": "http://dev-tcrs.autocall.ai:10014/"
+  },
+  "FERRARI": {
+    "MIDDLECONF": {
+      "DMRSURL": "http://dev-dmrs.mfinder.co.kr:30030",
+      "XMLNAME": "ASD",
+      "APPNAME": "ASD"
+    },
+    "TCRSUrl": "http://dev-tcrs.mfinder.co.kr:10010/"
+  },
+  "DelaySecSKT": 1000,
+  "DelaySecKT": 1000,
+  "DelaySecLGUP": 1000,
+  "MaxMemberList": 100,
+  "SKTProcess": true,
+  "KTProcess": true,
+  "LGUPProcess": true,
+  "SaturnProcess": true,
+  "BentleyProcess": true,
+  "BenzProcess": true,
+  "TeslaProcess": true,
+  "FerrariProcess": true,
+  "LogerfilePath": "/app/log/saturn_pcrs_%Y%m%d.log"
 }

@@ -3,25 +3,45 @@ package main
 import (
 	"flag"
 	"os"
-
+"fmt"
 	"git.datau.co.kr/earth/earth-asd/factory"
 	"git.datau.co.kr/earth/earth-asd/process"
 )
 
 func main() {
-	println("app started")
 
-	appEnv := flag.String("app-env", os.Getenv("APP_HOME"), "app env")
-	appMode := flag.String("app-mode", os.Getenv("APP_MODE"), "app mode")
-	flag.Parse()
+	configSet := flag.String("config_set", os.Getenv("CONFIG_SET"), "config set")
 
-	if *appEnv == "" {
-		*appEnv = `./`
+	var fac factory.Factory
+
+	if *configSet == "LIVE" {
+		configHome := flag.String("config_home", os.Getenv("CONFIG_HOME"), "app env")
+		configURL := flag.String("config_url", os.Getenv("CONFIG_URL"), "config url")
+
+		flag.Parse()
+
+		fmt.Println("CONFIG_HOME:", *configHome)
+		fmt.Println("CONFIG_URL:", *configURL)
+
+		fac = factory.Factory{JSONConfigPath: *configHome, JSONConfigURL: *configURL, ConfigSet: *configSet}
+
+	} else {
+		appEnv := flag.String("app-env", os.Getenv("CONFIG_HOME"), "app env")
+
+		flag.Parse()
+
+		if *appEnv == "" {
+			*appEnv = `./`
+		}
+		fac = factory.Factory{JSONConfigPath: *appEnv, ConfigSet: *configSet}
 	}
 
-	fac := factory.Factory{JSONConfigPath: *appEnv, AppMode: *appMode}
-
+	fmt.Println("CONFIG_SET:", *configSet)
 	fac.Initialize()
+
+	defer func() {
+		fac.GrpcClient.Close()
+	}()
 
 	var proc process.ASDProcess
 	proc.Initialize(&fac)

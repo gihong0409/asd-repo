@@ -25,7 +25,7 @@ func (self *ASDProcess) Initialize(fac *factory.Factory) {
 func (self *ASDProcess) Processing() {
 	requestID := utils.GenTransID()
 
-	self.Fac.Logger().Info("***************** 나이 조회 프로세스 실행 *****************")
+	self.Fac.Print("***************** 나이 조회 프로세스 실행 *****************")
 
 	var wg sync.WaitGroup
 

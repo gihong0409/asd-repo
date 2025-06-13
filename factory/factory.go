@@ -2,175 +2,157 @@ package factory
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
-	"strconv"
-
-	"github.com/datauniverse-lab/earth-common/dmrsapi/dmrsformats"
+     dms "github.com/datauniverse-lab/tesla-common/proto/dms/dms-gen"
+	"github.com/datauniverse-lab/saturn-common/commonutils"
+	"github.com/datauniverse-lab/saturn-common/dmrsapi/dmrsformats"
 	"github.com/sirupsen/logrus"
+	cronowriter "github.com/utahta/go-cronowriter"
+		"google.golang.org/grpc"
 )
 
+type Saturn struct {
+	DMRSINFO         dmrsformats.DMRSInfo   `json:"MIDDLECONF"`
+		TcrsURL               string               `json:"TcrsURL"`
+}
+type Bentley struct {
+	DMRSINFO         dmrsformats.DMRSInfo   `json:"MIDDLECONF"`
+		TcrsURL               string               `json:"TcrsURL"`
+}
+type Tesla struct {
+	DMSINFO         dmrsformats.DMSInfo   `json:"MIDDLECONF"`
+		TcrsURL               string               `json:"TcrsURL"`
+}
+type Benz struct {
+	DMRSINFO         dmrsformats.DMRSInfo   `json:"MIDDLECONF"`
+		TcrsURL               string               `json:"TcrsURL"`
+}
+type Ferrari struct {
+	DMRSINFO         dmrsformats.DMRSInfo   `json:"MIDDLECONF"`
+		TcrsURL               string               `json:"TcrsURL"`
+}
+
 type Config struct {
-	DmrsInfo     dmrsformats.DMRSInfo `json:"MIDDLECONF"`
-	AppName      string               `json:"AppName"`
-	DelaySecSKT  int                  `json:"DelaySecSKT"`
-	DelaySecKT   int                  `json:"DelaySecKT"`
-	DelaySecLGUP int                  `json:"DelaySecLGUP"`
+	SATURN Saturn  `json:"SATURN"`
+	BENTLEY          Bentley `json:"BENTLEY"`
+	TESLA            Tesla `json:"TESLA"`
+	BENZ             Benz `json:"BENZ"`
+	FERRARI          Ferrari `json:"FERRARI"`
+	DelaySecSKT      int           `json:"DelaySecSKT"`
+	DelaySecKT       int           `json:"DelaySecKT"`
+	DelaySecLGUP     int           `json:"DelaySecLGUP"`
+	MaxMemberList    int           `json:"MaxMemberList"`
+	SKTProcess       bool          `json:"SKTProcess"`
+	KTProcess        bool          `json:"KTProcess"`
+	LGUPProcess      bool          `json:"LGUPProcess"`
+	SaturnProcess    bool          `json:"SaturnProcess"`
+	BentleyProcess   bool          `json:"BentleyProcess"`
+	BenzProcess      bool          `json:"BenzProcess"`
+	TeslaProcess     bool          `json:"TeslaProcess"`
+	FerrariProcess   bool          `json:"FerrariProcess"`
+		LogerfilePath    string                 `json:"LogerfilePath"`
 
-	SKTProcess    bool     `json:"SKTProcess"`
-	KTProcess     bool     `json:"KTProcess"`
-	LGUPProcess   bool     `json:"LGUPProcess"`
-	MaxMemberList int      `json:"MaxMemberList"`
-	ServiceNames  []string `json:"ServiceNames"` // 서비스 이름 배열 추가
-
-	BentleyDMRSUrl string `json:"BentleyDMRSUrl"`
-	BenzDMRSUrl    string `json:"BenzDMRSUrl"`
-	FerrariDMRSUrl string `json:"FerrariDMRSUrl"`
-	TeslaDMRSUrl   string `json:"TeslaDMRSUrl"`
-	MarsDMRSUrl    string `json:"MarsDMRSUrl"`
-	SaturnDMRSUrl  string `json:"SaturnDMRSUrl"`
-
-	BentleyTCRSUrl string `json:"BentleyTCRSUrl"`
-	BenzTCRSUrl    string `json:"BenzTCRSUrl"`
-	FerrariTCRSUrl string `json:"FerrariTCRSUrl"`
-	TeslaTCRSUrl   string `json:"TeslaTCRSUrl"`
-	MarsTCRSUrl    string `json:"MarsTCRSUrl"`
-	SaturnTCRSUrl  string `json:"SaturnTCRSUrl"`
 }
 
 type Factory struct {
-	logger         *logrus.Logger
+	Logger         *logrus.Logger
 	JSONConfigPath string
-	property       Config
+	JSONConfigURL  string
+	Property       Config
+	ConfigSet      string
 	ConfigMap      map[string]interface{}
-	AppMode        string
-	TargetService  int
-	TargetTCRSUrl  string
+	HostName       string
+	Dmscall      dms.ServicesClient
+	GrpcClient     *grpc.ClientConn
 }
 
 func (_self *Factory) loadConfiguration(file string) {
 
+	if _self.ConfigSet == "LIVE" {
+		err := os.Mkdir(_self.JSONConfigPath, os.ModeDir)
+
+		if err != nil {
+			fmt.Print("Config 경로 생성 오류", err)
+		} else {
+			fmt.Print("Config 경로 생성 완료")
+		}
+
+		commonutils.DownloadFile(_self.JSONConfigURL, file)
+	}
+
 	dat, _ := ioutil.ReadFile(file)
 	fmt.Print(string(dat))
 
-	json.Unmarshal(dat, &_self.property)
+	json.Unmarshal(dat, &_self.Property)
 
 	_self.ConfigMap = make(map[string]interface{})
 	json.Unmarshal(dat, &_self.ConfigMap)
 
 }
 
-// Initialize factory initialize
 func (_self *Factory) Initialize() {
 
-	fmt.Println(_self.JSONConfigPath + "config.json")
+	fmt.Print("", "", _self.JSONConfigPath+"config.json")
 
 	_self.loadConfiguration(_self.JSONConfigPath + "config.json")
 
-	fmt.Println(_self.property)
+	fmt.Print("", "", _self.Property)
 
-	mw := io.MultiWriter(os.Stdout)
+	writer := cronowriter.MustNew(_self.Propertys().LogerfilePath+"_"+_self.HostName+".log", cronowriter.WithMutex())
+	mw := io.MultiWriter(writer, os.Stdout)
+	logrus.SetOutput(mw)
 
-	customformatster := new(logrus.TextFormatter)
-	customformatster.TimestampFormat = "2006-01-02 15:04:05"
+	customFormatter := new(logrus.TextFormatter)
+	customFormatter.TimestampFormat = "2006-01-02 15:04:05"
 
-	_self.logger = logrus.New()
+	_self.Logger = logrus.New()
+	_self.Logger.Formatter = new(logrus.TextFormatter)
+	_self.Logger.SetFormatter(customFormatter)
+	_self.Logger.Level = logrus.DebugLevel
+	_self.Logger.Out = mw
 
-	_self.logger.Level = logrus.DebugLevel
-	_self.logger.Out = mw
-	_self.logger.Formatter = customformatster
+	if _self.Propertys().TeslaProcess {
+		// dms 연결
+		conn, err := grpc.Dial(_self.Propertys().TESLA.DMRSINFO, grpc.WithInsecure())
+		if err != nil {
+			_self.Print("Connection Error to DMS", err)
+			panic(err)
+		} else {
+			_self.Print("Connection to DMS")
+		}
 
-	_self.TargetService = _self.loadEnv(_self.property.ServiceNames)
 
-	switch _self.TargetService {
-
-	case 0:
-		_self.property.DmrsInfo.DMRSURL = _self.property.BentleyDMRSUrl
-		_self.TargetTCRSUrl = _self.property.BentleyTCRSUrl
-	case 1:
-		_self.property.DmrsInfo.DMRSURL = _self.property.BenzDMRSUrl
-		_self.TargetTCRSUrl = _self.property.BenzTCRSUrl
-
-	case 2:
-		_self.property.DmrsInfo.DMRSURL = _self.property.FerrariDMRSUrl
-		_self.TargetTCRSUrl = _self.property.FerrariTCRSUrl
-	case 3:
-		_self.property.DmrsInfo.DMRSURL = _self.property.TeslaDMRSUrl
-		_self.TargetTCRSUrl = _self.property.TeslaTCRSUrl
-	case 4:
-		//_self.property.DmrsInfo.DMRSURL = _self.property.MarsDMRSUrl
-		//_self.TargetTCRSUrl = _self.property.MarsTCRSUrl
-		_self.Logger().Error("아직 ASD에 추가되지 않은 서비스입니다.")
-
-	case 5:
-		_self.property.DmrsInfo.DMRSURL = _self.property.SaturnDMRSUrl
-		_self.TargetTCRSUrl = _self.property.SaturnTCRSUrl
+		_self.GrpcClient = conn
+		dmsclient := dms.NewServicesClient(conn)
+		_self.Dmscall = dmsclient
 	}
 
-	println("target service: ", _self.TargetService,
-		"\nDMRS URL: ", _self.property.DmrsInfo.DMRSURL,
-		"\nTCRS URL: ", _self.TargetTCRSUrl)
-
 }
 
-// Logger returns logger
-func (_self *Factory) Logger() *logrus.Logger {
-	return _self.logger
+func (_self *Factory) ReloadConfig() {
+	appEnv := flag.String("app-env", os.Getenv("APP_HOME"), "app env")
+	flag.Parse()
+
+	if *appEnv == "" {
+		*appEnv = `./`
+	}
+
+	fmt.Println(*appEnv + "config.json")
+
+	_self.loadConfiguration(*appEnv + "config.json")
 }
 
-// Propertys returns config
 func (_self *Factory) Propertys() Config {
-	return _self.property
+	return _self.Property
 }
 
-func (_self *Factory) loadEnv(services []string) int {
 
-	names := services
-
-	if len(names) == 0 {
-		return -1
-	}
-
-	envService := make([]bool, len(names))
-
-	for i, name := range names {
-
-		envValue := os.Getenv(name)
-
-		fmt.Printf("Env %s: %s\n", name, envValue)
-
-		var err error
-
-		if envService[i], err = strconv.ParseBool(envValue); err != nil {
-			return -1
-		}
-
-		fmt.Printf("%s: %v\n", name, envService[i])
-	}
-	trueCount, targetService := 0, -1
-
-	for i, val := range envService {
-
-		if val {
-
-			trueCount++
-
-			targetService = i
-		}
-	}
-	if trueCount == 0 {
-		_self.Logger().Error("환경변수에 나이 추출을 실행할 서비스의 값을 true로 변경해주세요.")
-
-		return -1
-	}
-	if trueCount > 1 {
-		_self.Logger().Error("환경변수에 2개 이상의 서비스가 true로 설정되어 있습니다.")
-
-		return -1
-	}
-	_self.Logger().Info("나이를 조회할 서비스: ", names[targetService], targetService)
-
-	return targetService
+func (_self *Factory) Print(v ...interface{}) {
+	header := v[0]
+	v = append(v[:0], v[0+1:]...)
+	_self.Logger.Print("[REQUESTID][", header, "]", v)
 }
